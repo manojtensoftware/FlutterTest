@@ -64,6 +64,7 @@ Future maybeCreateUser(User user) async {
     displayName: user.displayName,
     photoUrl: user.photoURL,
     uid: user.uid,
+    phoneNumber: user.phoneNumber,
     createdTime: getCurrentTimestamp,
   );
 

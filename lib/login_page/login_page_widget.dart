@@ -1,7 +1,9 @@
 import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../main.dart';
+import '../signup/signup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -194,10 +196,21 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           FFButtonWidget(
-                            onPressed: () {
-                              print('BtnSignup pressed ...');
+                            onPressed: () async {
+                              final user = await signInAnonymously(context);
+                              if (user == null) {
+                                return;
+                              }
+                              await Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      NavBarPage(initialPage: 'HomePage'),
+                                ),
+                                (r) => false,
+                              );
                             },
-                            text: 'Signup',
+                            text: 'Login',
                             options: FFButtonOptions(
                               width: 130,
                               height: 40,
@@ -215,20 +228,14 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           ),
                           FFButtonWidget(
                             onPressed: () async {
-                              final user = await signInAnonymously(context);
-                              if (user == null) {
-                                return;
-                              }
-                              await Navigator.pushAndRemoveUntil(
+                              await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      NavBarPage(initialPage: 'HomePage'),
+                                  builder: (context) => SignupWidget(),
                                 ),
-                                (r) => false,
                               );
                             },
-                            text: 'Login',
+                            text: 'Signup',
                             options: FFButtonOptions(
                               width: 130,
                               height: 40,
