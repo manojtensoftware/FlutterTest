@@ -247,68 +247,88 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             ),
           ),
           body: SafeArea(
-            child: Container(
-              width: double.infinity,
-              height: 500,
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
-                    child: PageView(
-                      controller: pageViewController,
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Image.network(
-                          'https://picsum.photos/seed/966/600',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                        Image.network(
-                          'https://picsum.photos/seed/422/600',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                        Image.network(
-                          'https://picsum.photos/seed/138/600',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        )
-                      ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment(0, 1),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: SmoothPageIndicator(
-                        controller: pageViewController,
-                        count: 3,
-                        axisDirection: Axis.horizontal,
-                        onDotClicked: (i) {
-                          pageViewController.animateToPage(
-                            i,
-                            duration: Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        effect: ExpandingDotsEffect(
-                          expansionFactor: 2,
-                          spacing: 8,
-                          radius: 16,
-                          dotWidth: 16,
-                          dotHeight: 16,
-                          dotColor: Color(0xFF9E9E9E),
-                          activeDotColor: Color(0xFF3F51B5),
-                          paintStyle: PaintingStyle.fill,
+            child: StreamBuilder<List<BannersRecord>>(
+              stream: queryBannersRecord(
+                singleRecord: true,
+              ),
+              builder: (context, snapshot) {
+                // Customize what your widget looks like when it's loading.
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                List<BannersRecord> pageViewBannersRecordList = snapshot.data;
+                // Customize what your widget looks like with no query results.
+                if (snapshot.data.isEmpty) {
+                  // return Container();
+                  // For now, we'll just include some dummy data.
+                  pageViewBannersRecordList =
+                      createDummyBannersRecord(count: 1);
+                }
+                final pageViewBannersRecord = pageViewBannersRecordList.first;
+                return Container(
+                  width: 500,
+                  height: 500,
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                        child: PageView(
+                          controller: pageViewController,
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Image.network(
+                              pageViewBannersRecord.firstBanner,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                            Image.network(
+                              pageViewBannersRecord.secondBanner,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                            Image.network(
+                              pageViewBannersRecord.thirdBanner,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            )
+                          ],
                         ),
                       ),
-                    ),
+                      Align(
+                        alignment: Alignment(0, 1),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: SmoothPageIndicator(
+                            controller: pageViewController,
+                            count: 3,
+                            axisDirection: Axis.horizontal,
+                            onDotClicked: (i) {
+                              pageViewController.animateToPage(
+                                i,
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.ease,
+                              );
+                            },
+                            effect: ExpandingDotsEffect(
+                              expansionFactor: 2,
+                              spacing: 8,
+                              radius: 16,
+                              dotWidth: 16,
+                              dotHeight: 16,
+                              dotColor: Color(0xFF9E9E9E),
+                              activeDotColor: Color(0xFF3F51B5),
+                              paintStyle: PaintingStyle.fill,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         );
