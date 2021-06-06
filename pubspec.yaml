@@ -41,6 +41,7 @@ dependencies:
   page_transition:
   rxdart: ^0.25.0
   sign_in_with_apple: ^2.5.4
+  smooth_page_indicator:
   timeago:
   url_launcher:
 

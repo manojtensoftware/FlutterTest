@@ -17,6 +17,7 @@ class LoginPageWidget extends StatefulWidget {
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
   TextEditingController passWordController;
+  bool passwordVisibility;
   TextEditingController userNameController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -24,6 +25,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   void initState() {
     super.initState();
     passWordController = TextEditingController();
+    passwordVisibility = false;
     userNameController = TextEditingController();
   }
 
@@ -147,7 +149,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                               padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
                               child: TextFormField(
                                 controller: passWordController,
-                                obscureText: true,
+                                obscureText: !passwordVisibility,
                                 decoration: InputDecoration(
                                   isDense: true,
                                   hintText: 'Password',
@@ -177,6 +179,18 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                       bottomRight: Radius.circular(4),
                                       topLeft: Radius.circular(4),
                                       topRight: Radius.circular(4),
+                                    ),
+                                  ),
+                                  suffixIcon: InkWell(
+                                    onTap: () => setState(
+                                      () => passwordVisibility =
+                                          !passwordVisibility,
+                                    ),
+                                    child: Icon(
+                                      passwordVisibility
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      size: 22,
                                     ),
                                   ),
                                 ),

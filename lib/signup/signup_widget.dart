@@ -5,6 +5,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/upload_media.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,17 +23,21 @@ class _SignupWidgetState extends State<SignupWidget> {
   TextEditingController txtnameController;
   TextEditingController txtphoneController;
   TextEditingController txtpasswordController;
-  TextEditingController txtpasswordController;
+  bool passwordVisibility;
+  TextEditingController txtconfirmpasswordController;
+  bool passwordVisibility;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    txtconfirmpasswordController = TextEditingController();
+    passwordVisibility = false;
     txtemailController = TextEditingController();
     txtnameController = TextEditingController();
     txtphoneController = TextEditingController();
     txtpasswordController = TextEditingController();
-    txtpasswordController = TextEditingController();
+    passwordVisibility = false;
   }
 
   @override
@@ -77,8 +82,8 @@ class _SignupWidgetState extends State<SignupWidget> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                   ),
-                  child: Image.network(
-                    'https://picsum.photos/seed/84/600',
+                  child: CachedNetworkImage(
+                    imageUrl: 'https://picsum.photos/seed/84/600',
                   ),
                 ),
               ),
@@ -211,7 +216,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                 padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
                 child: TextFormField(
                   controller: txtpasswordController,
-                  obscureText: true,
+                  obscureText: !passwordVisibility,
                   decoration: InputDecoration(
                     hintText: 'Password',
                     hintStyle: FlutterFlowTheme.bodyText1.override(
@@ -242,6 +247,17 @@ class _SignupWidgetState extends State<SignupWidget> {
                       ),
                     ),
                     contentPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    suffixIcon: InkWell(
+                      onTap: () => setState(
+                        () => passwordVisibility = !passwordVisibility,
+                      ),
+                      child: Icon(
+                        passwordVisibility
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 22,
+                      ),
+                    ),
                   ),
                   style: FlutterFlowTheme.bodyText1.override(
                     fontFamily: 'Poppins',
@@ -252,8 +268,8 @@ class _SignupWidgetState extends State<SignupWidget> {
               Padding(
                 padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
                 child: TextFormField(
-                  controller: txtpasswordController,
-                  obscureText: true,
+                  controller: txtconfirmpasswordController,
+                  obscureText: !passwordVisibility,
                   decoration: InputDecoration(
                     hintText: 'Confirm Password',
                     hintStyle: FlutterFlowTheme.bodyText1.override(
@@ -284,6 +300,17 @@ class _SignupWidgetState extends State<SignupWidget> {
                       ),
                     ),
                     contentPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    suffixIcon: InkWell(
+                      onTap: () => setState(
+                        () => passwordVisibility = !passwordVisibility,
+                      ),
+                      child: Icon(
+                        passwordVisibility
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 22,
+                      ),
+                    ),
                   ),
                   style: FlutterFlowTheme.bodyText1.override(
                     fontFamily: 'Poppins',
@@ -298,7 +325,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                     final displayName = txtnameController.text;
                     final photoUrl = uploadedFileUrl;
                     final createdTime = getCurrentTimestamp;
-                    final passWord = txtpasswordController.text;
+                    final passWord = txtconfirmpasswordController.text;
                     final phoneNumber = txtphoneController.text;
 
                     final usersRecordData = createUsersRecordData(
@@ -311,6 +338,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                     );
 
                     await UsersRecord.collection.doc().set(usersRecordData);
+                    Navigator.pop(context);
                   },
                   text: 'Submit',
                   options: FFButtonOptions(
