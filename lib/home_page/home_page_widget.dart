@@ -75,7 +75,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   ),
                                 ),
                                 Text(
-                                  currentUserDisplayName,
+                                  homePageUsersRecord.displayName,
                                   style: FlutterFlowTheme.bodyText1.override(
                                     fontFamily: 'Poppins',
                                   ),

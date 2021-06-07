@@ -6,7 +6,6 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/upload_media.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -321,12 +320,32 @@ class _SignupWidgetState extends State<SignupWidget> {
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: FFButtonWidget(
                   onPressed: () async {
+                    if (txtpasswordController.text !=
+                        txtconfirmpasswordController.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Passwords don't match!",
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+
+                    final user = await createAccountWithEmail(
+                      context,
+                      txtemailController.text,
+                      txtpasswordController.text,
+                    );
+                    if (user == null) {
+                      return;
+                    }
+
                     final email = txtemailController.text;
                     final displayName = txtnameController.text;
                     final photoUrl = uploadedFileUrl;
                     final createdTime = getCurrentTimestamp;
-                    final passWord = txtconfirmpasswordController.text;
-                    final phoneNumber = txtphoneController.text;
+                    final passWord = '';
 
                     final usersRecordData = createUsersRecordData(
                       email: email,
@@ -334,10 +353,12 @@ class _SignupWidgetState extends State<SignupWidget> {
                       photoUrl: photoUrl,
                       createdTime: createdTime,
                       passWord: passWord,
-                      phoneNumber: phoneNumber,
                     );
 
-                    await UsersRecord.collection.doc().set(usersRecordData);
+                    await UsersRecord.collection
+                        .doc(user.uid)
+                        .update(usersRecordData);
+
                     Navigator.pop(context);
                   },
                   text: 'Submit',

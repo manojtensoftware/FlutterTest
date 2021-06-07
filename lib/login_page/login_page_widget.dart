@@ -211,10 +211,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                         children: [
                           FFButtonWidget(
                             onPressed: () async {
-                              final user = await signInAnonymously(context);
+                              final user = await signInWithEmail(
+                                context,
+                                userNameController.text,
+                                passWordController.text,
+                              );
                               if (user == null) {
                                 return;
                               }
+
                               await Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
