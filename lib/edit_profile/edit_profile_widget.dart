@@ -46,75 +46,64 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         final editProfileUsersRecord = snapshot.data;
         return Scaffold(
           key: scaffoldKey,
-          appBar: StreamBuilder<UsersRecord>(
-            stream: UsersRecord.getDocument(currentUserReference),
-            builder: (context, snapshot) {
-              // Customize what your widget looks like when it's loading.
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-              final appBarUsersRecord = snapshot.data;
-              return AppBar(
-                backgroundColor: FlutterFlowTheme.primaryColor,
-                automaticallyImplyLeading: true,
-                actions: [
-                  IconButton(
-                    onPressed: () async {
-                      final email = txtemailController.text;
-                      final displayName = txtnameController.text;
-                      final photoUrl = uploadedFileUrl;
-                      final phoneNumber = txtphoneController.text;
-                      final dob = txtdobController.text;
-                      final doa = txtdoaController.text;
+          appBar: AppBar(
+            backgroundColor: FlutterFlowTheme.primaryColor,
+            automaticallyImplyLeading: true,
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  final email = txtemailController.text;
+                  final displayName = txtnameController.text;
+                  final photoUrl = uploadedFileUrl;
+                  final phoneNumber = txtphoneController.text;
+                  final dob = txtdobController.text;
+                  final doa = txtdoaController.text;
 
-                      final usersRecordData = createUsersRecordData(
-                        email: email,
-                        displayName: displayName,
-                        photoUrl: photoUrl,
-                        phoneNumber: phoneNumber,
-                        dob: dob,
-                        doa: doa,
-                      );
+                  final usersRecordData = createUsersRecordData(
+                    email: email,
+                    displayName: displayName,
+                    photoUrl: photoUrl,
+                    phoneNumber: phoneNumber,
+                    dob: dob,
+                    doa: doa,
+                  );
 
-                      await editProfileUsersRecord.reference
-                          .update(usersRecordData);
-                      await showDialog(
-                        context: context,
-                        builder: (alertDialogContext) {
-                          return AlertDialog(
-                            title: Text('Update?'),
-                            content: Text('Update User Information?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(alertDialogContext),
-                                child: Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.pop(alertDialogContext);
-                                  Navigator.pop(context);
-                                  ;
-                                },
-                                child: Text('Confirm'),
-                              ),
-                            ],
-                          );
-                        },
+                  await editProfileUsersRecord.reference
+                      .update(usersRecordData);
+                  await showDialog(
+                    context: context,
+                    builder: (alertDialogContext) {
+                      return AlertDialog(
+                        title: Text('Update?'),
+                        content: Text('Update User Information?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(alertDialogContext),
+                            child: Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pop(alertDialogContext);
+                              Navigator.pop(context);
+                              ;
+                            },
+                            child: Text('Confirm'),
+                          ),
+                        ],
                       );
                     },
-                    icon: Icon(
-                      Icons.done,
-                      color: Colors.black,
-                      size: 30,
-                    ),
-                    iconSize: 30,
-                  )
-                ],
-                centerTitle: true,
-                elevation: 4,
-              );
-            },
+                  );
+                },
+                icon: Icon(
+                  Icons.done,
+                  color: Colors.black,
+                  size: 30,
+                ),
+                iconSize: 30,
+              )
+            ],
+            centerTitle: true,
+            elevation: 4,
           ),
           body: SafeArea(
             child: Align(
