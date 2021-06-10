@@ -1,7 +1,10 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../edit_profile/edit_profile_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../login_page/login_page_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -71,7 +74,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: Image.network(
-                                    currentUserPhoto,
+                                    homePageUsersRecord.photoUrl,
                                   ),
                                 ),
                                 Text(
@@ -81,8 +84,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () {
-                                    print('Btnedit pressed ...');
+                                  onPressed: () async {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            EditProfileWidget(),
+                                      ),
+                                    );
                                   },
                                   icon: Icon(
                                     Icons.edit,
@@ -99,80 +108,28 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: FaIcon(
-                          FontAwesomeIcons.wallet,
-                          color: Color(0xFF0C0101),
-                          size: 24,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: FaIcon(
+                        FontAwesomeIcons.wallet,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Text(
+                        'Wallet',
+                        style: FlutterFlowTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                        child: Text(
-                          'Wallet Status',
-                          style: FlutterFlowTheme.bodyText1.override(
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: FaIcon(
-                          FontAwesomeIcons.ticketAlt,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                        child: Text(
-                          'Bookings',
-                          style: FlutterFlowTheme.bodyText1.override(
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: FaIcon(
-                          FontAwesomeIcons.history,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                        child: Text(
-                          'Service History',
-                          style: FlutterFlowTheme.bodyText1.override(
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
                 Divider(),
                 Padding(
@@ -190,10 +147,22 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                        child: Text(
-                          'Sign Out',
-                          style: FlutterFlowTheme.bodyText1.override(
-                            fontFamily: 'Poppins',
+                        child: InkWell(
+                          onTap: () async {
+                            await signOut();
+                            await Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginPageWidget(),
+                              ),
+                              (r) => false,
+                            );
+                          },
+                          child: Text(
+                            'Sign Out',
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
                           ),
                         ),
                       )
@@ -215,10 +184,31 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                        child: Text(
-                          'About Us',
-                          style: FlutterFlowTheme.bodyText1.override(
-                            fontFamily: 'Poppins',
+                        child: InkWell(
+                          onTap: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (alertDialogContext) {
+                                return AlertDialog(
+                                  title: Text('About Us'),
+                                  content:
+                                      Text('App from Ten Software ver 1.01'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(alertDialogContext),
+                                      child: Text('Ok'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            'About Us',
+                            style: FlutterFlowTheme.bodyText1.override(
+                              fontFamily: 'Poppins',
+                            ),
                           ),
                         ),
                       )
@@ -276,20 +266,20 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           controller: pageViewController,
                           scrollDirection: Axis.horizontal,
                           children: [
-                            Image.network(
-                              pageViewBannersRecord.firstBanner,
+                            CachedNetworkImage(
+                              imageUrl: pageViewBannersRecord.firstBanner,
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
                             ),
-                            Image.network(
-                              pageViewBannersRecord.secondBanner,
+                            CachedNetworkImage(
+                              imageUrl: pageViewBannersRecord.secondBanner,
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
                             ),
-                            Image.network(
-                              pageViewBannersRecord.thirdBanner,
+                            CachedNetworkImage(
+                              imageUrl: pageViewBannersRecord.thirdBanner,
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
