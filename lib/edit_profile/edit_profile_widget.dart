@@ -5,20 +5,26 @@ import '../flutter_flow/flutter_flow_drop_down_template.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/upload_media.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditProfileWidget extends StatefulWidget {
-  EditProfileWidget({Key key}) : super(key: key);
+  EditProfileWidget({
+    Key key,
+    this.cid,
+  }) : super(key: key);
+
+  final DocumentReference cid;
 
   @override
   _EditProfileWidgetState createState() => _EditProfileWidgetState();
 }
 
 class _EditProfileWidgetState extends State<EditProfileWidget> {
-  String dropDownValue1;
-  String dropDownValue2;
+  String cmbdayValue;
+  String cmbmonthValue;
   String uploadedFileUrl;
   TextEditingController txtemailController;
   TextEditingController txtnameController;
@@ -29,8 +35,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   @override
   void initState() {
     super.initState();
-    dropDownValue1 = 'Day';
-    dropDownValue2 = 'Month';
+    cmbdayValue = 'Day';
+    cmbmonthValue = 'Month';
     txtemailController = TextEditingController();
     txtnameController = TextEditingController();
     txtphoneController = TextEditingController();
@@ -40,7 +46,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<UsersRecord>(
-      stream: UsersRecord.getDocument(currentUserReference),
+      stream: UsersRecord.getDocument(widget.cid),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -282,7 +288,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                             '31'
                           ],
                           onChanged: (value) {
-                            setState(() => dropDownValue1 = value);
+                            setState(() => cmbdayValue = value);
                           },
                           width: 130,
                           height: 40,
@@ -317,7 +323,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                             '12'
                           ],
                           onChanged: (value) {
-                            setState(() => dropDownValue2 = value);
+                            setState(() => cmbmonthValue = value);
                           },
                           width: 130,
                           height: 40,
@@ -371,6 +377,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                           topRight: Radius.circular(8),
                         ),
                       ),
+                      filled: true,
                       contentPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
                       prefixIcon: Icon(
                         Icons.date_range,
