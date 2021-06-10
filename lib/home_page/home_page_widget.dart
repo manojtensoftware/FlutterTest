@@ -88,8 +88,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                     await Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditProfileWidget(),
+                                        builder: (context) => EditProfileWidget(
+                                          cid: homePageUsersRecord,
+                                        ),
                                       ),
                                     );
                                   },
