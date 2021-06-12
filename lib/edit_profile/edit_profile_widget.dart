@@ -1,11 +1,12 @@
+import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../backend/firebase_storage/storage.dart';
 import '../flutter_flow/flutter_flow_drop_down_template.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/upload_media.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EditProfileWidget extends StatefulWidget {
@@ -21,24 +22,26 @@ class EditProfileWidget extends StatefulWidget {
 }
 
 class _EditProfileWidgetState extends State<EditProfileWidget> {
+  String cmadayValue;
+  String cmamonthValue;
+  String cmbbmonthValue;
   String cmbdayValue;
-  String cmbmonthValue;
   String uploadedFileUrl;
   TextEditingController txtemailController;
   TextEditingController txtnameController;
   TextEditingController txtphoneController;
-  TextEditingController txtdateController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    cmadayValue = 'Day';
+    cmamonthValue = 'Month';
+    cmbbmonthValue = 'Month';
     cmbdayValue = 'Day';
-    cmbmonthValue = 'Month';
     txtemailController = TextEditingController(text: widget.cid.email);
     txtnameController = TextEditingController(text: widget.cid.displayName);
     txtphoneController = TextEditingController(text: widget.cid.phoneNumber);
-    txtdateController = TextEditingController();
   }
 
   @override
@@ -50,8 +53,31 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         automaticallyImplyLeading: true,
         actions: [
           IconButton(
-            onPressed: () {
-              print('Saveicon pressed ...');
+            onPressed: () async {
+              final email = txtemailController.text;
+              final displayName = txtnameController.text;
+              final photoUrl = uploadedFileUrl;
+              final createdTime = getCurrentTimestamp;
+              final phoneNumber = txtphoneController.text;
+              final dobDay = cmbdayValue;
+              final dobMonth = cmbbmonthValue;
+              final doaDay = cmadayValue;
+              final doaMonth = cmamonthValue;
+
+              final usersRecordData = createUsersRecordData(
+                email: email,
+                displayName: displayName,
+                photoUrl: photoUrl,
+                createdTime: createdTime,
+                phoneNumber: phoneNumber,
+                dobDay: dobDay,
+                dobMonth: dobMonth,
+                doaDay: doaDay,
+                doaMonth: doaMonth,
+              );
+
+              await widget.cid.reference.update(usersRecordData);
+              Navigator.pop(context);
             },
             icon: Icon(
               Icons.done,
@@ -69,33 +95,55 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            InkWell(
-              onDoubleTap: () async {
-                final selectedMedia = await selectMedia();
-                if (selectedMedia != null &&
-                    validateFileFormat(selectedMedia.storagePath, context)) {
-                  showUploadMessage(context, 'Uploading file...',
-                      showLoading: true);
-                  final downloadUrl = await uploadData(
-                      selectedMedia.storagePath, selectedMedia.bytes);
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  if (downloadUrl != null) {
-                    setState(() => uploadedFileUrl = downloadUrl);
-                    showUploadMessage(context, 'Success!');
-                  } else {
-                    showUploadMessage(context, 'Failed to upload media');
-                  }
-                }
-              },
+            Align(
+              alignment: Alignment(0, 0),
               child: Container(
-                width: 120,
-                height: 120,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.network(
-                  widget.cid.photoUrl,
+                width: 500,
+                height: 100,
+                child: Stack(
+                  alignment: Alignment(0, 0),
+                  children: [
+                    InkWell(
+                      onDoubleTap: () async {
+                        final selectedMedia = await selectMedia();
+                        if (selectedMedia != null &&
+                            validateFileFormat(
+                                selectedMedia.storagePath, context)) {
+                          showUploadMessage(context, 'Uploading file...',
+                              showLoading: true);
+                          final downloadUrl = await uploadData(
+                              selectedMedia.storagePath, selectedMedia.bytes);
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          if (downloadUrl != null) {
+                            setState(() => uploadedFileUrl = downloadUrl);
+                            showUploadMessage(context, 'Success!');
+                          } else {
+                            showUploadMessage(
+                                context, 'Failed to upload media');
+                          }
+                        }
+                      },
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.network(
+                          widget.cid.photoUrl,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment(0, 0),
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: Color(0x6D000000),
+                        size: 36,
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -228,165 +276,224 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
               padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: FaIcon(
-                      FontAwesomeIcons.birthdayCake,
-                      color: Color(0xFFDD4A4A),
-                      size: 24,
+                    child: Text(
+                      'DOB',
+                      style: FlutterFlowTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: FlutterFlowDropDown(
-                      options: [
-                        'Day',
-                        '1',
-                        '2',
-                        '3',
-                        '4',
-                        '5',
-                        '6',
-                        '7',
-                        '8',
-                        '9',
-                        '10',
-                        '11',
-                        '12',
-                        '13',
-                        '14',
-                        '15',
-                        '16',
-                        '17',
-                        '18',
-                        '19',
-                        '20',
-                        '21',
-                        '22',
-                        '23',
-                        '24',
-                        '25',
-                        '26',
-                        '27',
-                        '28',
-                        '29',
-                        '30',
-                        '31'
-                      ],
-                      onChanged: (value) {
-                        setState(() => cmbdayValue = value);
-                      },
-                      width: 130,
-                      height: 40,
-                      textStyle: FlutterFlowTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: FlutterFlowDropDown(
+                        options: [
+                          'Day',
+                          '1',
+                          '2',
+                          '3',
+                          '4',
+                          '5',
+                          '6',
+                          '7',
+                          '8',
+                          '9',
+                          '10',
+                          '11',
+                          '12',
+                          '13',
+                          '14',
+                          '15',
+                          '16',
+                          '17',
+                          '18',
+                          '19',
+                          '20',
+                          '21',
+                          '22',
+                          '23',
+                          '24',
+                          '25',
+                          '26',
+                          '27',
+                          '28',
+                          '29',
+                          '30',
+                          '31'
+                        ],
+                        onChanged: (value) {
+                          setState(() => cmbdayValue = value);
+                        },
+                        width: 130,
+                        height: 40,
+                        textStyle: FlutterFlowTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        ),
+                        fillColor: Color(0xFFF9F8F8),
+                        elevation: 2,
+                        borderColor: Color(0xFF84A9E0),
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
                       ),
-                      fillColor: Color(0xFFF9F8F8),
-                      elevation: 2,
-                      borderColor: Color(0xFF84A9E0),
-                      borderWidth: 1,
-                      borderRadius: 4,
-                      margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                    child: FlutterFlowDropDown(
-                      options: [
-                        'Month',
-                        '1',
-                        '2',
-                        '3',
-                        '4',
-                        '5',
-                        '6',
-                        '7',
-                        '8',
-                        '9',
-                        '10',
-                        '11',
-                        '12'
-                      ],
-                      onChanged: (value) {
-                        setState(() => cmbmonthValue = value);
-                      },
-                      width: 130,
-                      height: 40,
-                      textStyle: FlutterFlowTheme.bodyText1.override(
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 8, 0),
+                      child: FlutterFlowDropDown(
+                        options: [
+                          'Month',
+                          '1',
+                          '2',
+                          '3',
+                          '4',
+                          '5',
+                          '6',
+                          '7',
+                          '8',
+                          '9',
+                          '10',
+                          '11',
+                          '12'
+                        ],
+                        onChanged: (value) {
+                          setState(() => cmbbmonthValue = value);
+                        },
+                        width: 130,
+                        height: 40,
+                        textStyle: FlutterFlowTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        ),
+                        fillColor: Color(0xFFF9F8F8),
+                        elevation: 2,
+                        borderColor: Color(0xFF84A9E0),
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
                       ),
-                      fillColor: Color(0xFFF9F8F8),
-                      elevation: 2,
-                      borderColor: Color(0xFF84A9E0),
-                      borderWidth: 1,
-                      borderRadius: 4,
-                      margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
                     ),
                   )
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
-              child: TextFormField(
-                onChanged: (_) => setState(() {}),
-                controller: txtdateController,
-                obscureText: false,
-                decoration: InputDecoration(
-                  hintText: 'DOB',
-                  hintStyle: FlutterFlowTheme.bodyText1.override(
-                    fontFamily: 'Poppins',
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFF84A9E0),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
+              padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(
+                      'DOA',
+                      style: FlutterFlowTheme.bodyText1.override(
+                        fontFamily: 'Poppins',
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFF84A9E0),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: FlutterFlowDropDown(
+                        options: [
+                          'Day',
+                          '1',
+                          '2',
+                          '3',
+                          '4',
+                          '5',
+                          '6',
+                          '7',
+                          '8',
+                          '9',
+                          '10',
+                          '11',
+                          '12',
+                          '13',
+                          '14',
+                          '15',
+                          '16',
+                          '17',
+                          '18',
+                          '19',
+                          '20',
+                          '21',
+                          '22',
+                          '23',
+                          '24',
+                          '25',
+                          '26',
+                          '27',
+                          '28',
+                          '29',
+                          '30',
+                          '31'
+                        ],
+                        onChanged: (value) {
+                          setState(() => cmadayValue = value);
+                        },
+                        width: 130,
+                        height: 40,
+                        textStyle: FlutterFlowTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        ),
+                        fillColor: Color(0xFFF9F8F8),
+                        elevation: 2,
+                        borderColor: Color(0xFF84A9E0),
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                      ),
                     ),
                   ),
-                  filled: true,
-                  contentPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                  prefixIcon: Icon(
-                    Icons.date_range,
-                  ),
-                  suffixIcon: txtdateController.text.isNotEmpty
-                      ? InkWell(
-                          onTap: () => setState(
-                            () => txtdateController.clear(),
-                          ),
-                          child: Icon(
-                            Icons.clear,
-                            size: 22,
-                          ),
-                        )
-                      : null,
-                ),
-                style: FlutterFlowTheme.bodyText1.override(
-                  fontFamily: 'Poppins',
-                ),
-                keyboardType: TextInputType.datetime,
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 8, 0),
+                      child: FlutterFlowDropDown(
+                        options: [
+                          'Month',
+                          '1',
+                          '2',
+                          '3',
+                          '4',
+                          '5',
+                          '6',
+                          '7',
+                          '8',
+                          '9',
+                          '10',
+                          '11',
+                          '12'
+                        ],
+                        onChanged: (value) {
+                          setState(() => cmamonthValue = value);
+                        },
+                        width: 130,
+                        height: 40,
+                        textStyle: FlutterFlowTheme.bodyText1.override(
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        ),
+                        fillColor: Color(0xFFF9F8F8),
+                        elevation: 2,
+                        borderColor: Color(0xFF84A9E0),
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                      ),
+                    ),
+                  )
+                ],
               ),
             )
           ],

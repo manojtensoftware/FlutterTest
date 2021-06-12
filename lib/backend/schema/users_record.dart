@@ -38,10 +38,20 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
   String get phoneNumber;
 
   @nullable
-  String get dob;
+  @BuiltValueField(wireName: 'dob_day')
+  String get dobDay;
 
   @nullable
-  String get doa;
+  @BuiltValueField(wireName: 'dob_month')
+  String get dobMonth;
+
+  @nullable
+  @BuiltValueField(wireName: 'doa_day')
+  String get doaDay;
+
+  @nullable
+  @BuiltValueField(wireName: 'doa_month')
+  String get doaMonth;
 
   @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
@@ -54,8 +64,10 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..passWord = ''
     ..uid = ''
     ..phoneNumber = ''
-    ..dob = ''
-    ..doa = '';
+    ..dobDay = ''
+    ..dobMonth = ''
+    ..doaDay = ''
+    ..doaMonth = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -77,8 +89,10 @@ Map<String, dynamic> createUsersRecordData({
   String passWord,
   String uid,
   String phoneNumber,
-  String dob,
-  String doa,
+  String dobDay,
+  String dobMonth,
+  String doaDay,
+  String doaMonth,
 }) =>
     serializers.serializeWith(
         UsersRecord.serializer,
@@ -90,8 +104,10 @@ Map<String, dynamic> createUsersRecordData({
           ..passWord = passWord
           ..uid = uid
           ..phoneNumber = phoneNumber
-          ..dob = dob
-          ..doa = doa));
+          ..dobDay = dobDay
+          ..dobMonth = dobMonth
+          ..doaDay = doaDay
+          ..doaMonth = doaMonth));
 
 UsersRecord get dummyUsersRecord {
   final builder = UsersRecordBuilder()
@@ -102,8 +118,10 @@ UsersRecord get dummyUsersRecord {
     ..passWord = dummyString
     ..uid = dummyString
     ..phoneNumber = dummyString
-    ..dob = dummyString
-    ..doa = dummyString;
+    ..dobDay = dummyString
+    ..dobMonth = dummyString
+    ..doaDay = dummyString
+    ..doaMonth = dummyString;
   return builder.build();
 }
 

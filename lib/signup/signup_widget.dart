@@ -1,11 +1,8 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
-import '../backend/firebase_storage/storage.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/upload_media.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,13 +14,12 @@ class SignupWidget extends StatefulWidget {
 }
 
 class _SignupWidgetState extends State<SignupWidget> {
-  String uploadedFileUrl;
+  TextEditingController txtconfirmpasswordController;
+  bool passwordVisibility;
   TextEditingController txtemailController;
   TextEditingController txtnameController;
   TextEditingController txtphoneController;
   TextEditingController txtpasswordController;
-  bool passwordVisibility;
-  TextEditingController txtconfirmpasswordController;
   bool passwordVisibility;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -56,36 +52,6 @@ class _SignupWidgetState extends State<SignupWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              InkWell(
-                onDoubleTap: () async {
-                  final selectedMedia = await selectMedia();
-                  if (selectedMedia != null &&
-                      validateFileFormat(selectedMedia.storagePath, context)) {
-                    showUploadMessage(context, 'Uploading file...',
-                        showLoading: true);
-                    final downloadUrl = await uploadData(
-                        selectedMedia.storagePath, selectedMedia.bytes);
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    if (downloadUrl != null) {
-                      setState(() => uploadedFileUrl = downloadUrl);
-                      showUploadMessage(context, 'Success!');
-                    } else {
-                      showUploadMessage(context, 'Failed to upload media');
-                    }
-                  }
-                },
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: 'https://picsum.photos/seed/84/600',
-                  ),
-                ),
-              ),
               Padding(
                 padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
                 child: TextFormField(
@@ -343,16 +309,16 @@ class _SignupWidgetState extends State<SignupWidget> {
 
                     final email = txtemailController.text;
                     final displayName = txtnameController.text;
-                    final photoUrl = uploadedFileUrl;
                     final createdTime = getCurrentTimestamp;
                     final passWord = '';
+                    final phoneNumber = txtphoneController.text;
 
                     final usersRecordData = createUsersRecordData(
                       email: email,
                       displayName: displayName,
-                      photoUrl: photoUrl,
                       createdTime: createdTime,
                       passWord: passWord,
+                      phoneNumber: phoneNumber,
                     );
 
                     await UsersRecord.collection
