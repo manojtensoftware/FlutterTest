@@ -11,6 +11,7 @@ import 'schema/banners_record.dart';
 import 'schema/serializers.dart';
 
 export 'package:cloud_firestore/cloud_firestore.dart';
+export 'schema/serializers.dart';
 export 'schema/users_record.dart';
 export 'schema/product_category_record.dart';
 export 'schema/item_master_record.dart';

@@ -4,12 +4,10 @@ import '../edit_profile/edit_profile_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../login_page/login_page_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePageWidget extends StatefulWidget {
   HomePageWidget({
@@ -24,7 +22,6 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget> {
-  final pageViewController = PageController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -46,13 +43,25 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             centerTitle: true,
             elevation: 4,
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              print('Floatbutton pressed ...');
+            },
+            backgroundColor: Color(0xFF0C0101),
+            elevation: 8,
+            child: FaIcon(
+              FontAwesomeIcons.plus,
+              color: Color(0xFFF9F8F8),
+              size: 30,
+            ),
+          ),
           drawer: Drawer(
             elevation: 16,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -62,6 +71,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           child: Card(
                             clipBehavior: Clip.antiAliasWithSaveLayer,
                             color: Color(0xFFF5F5F5),
+                            elevation: 5,
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -75,6 +85,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   ),
                                   child: Image.network(
                                     homePageUsersRecord.photoUrl,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                                 Text(
@@ -235,91 +246,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ),
                 )
               ],
-            ),
-          ),
-          body: SafeArea(
-            child: StreamBuilder<List<BannersRecord>>(
-              stream: queryBannersRecord(
-                singleRecord: true,
-              ),
-              builder: (context, snapshot) {
-                // Customize what your widget looks like when it's loading.
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                List<BannersRecord> pageViewBannersRecordList = snapshot.data;
-                // Customize what your widget looks like with no query results.
-                if (snapshot.data.isEmpty) {
-                  // return Container();
-                  // For now, we'll just include some dummy data.
-                  pageViewBannersRecordList =
-                      createDummyBannersRecord(count: 1);
-                }
-                final pageViewBannersRecord = pageViewBannersRecordList.first;
-                return Container(
-                  width: 500,
-                  height: 500,
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
-                        child: PageView(
-                          controller: pageViewController,
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            CachedNetworkImage(
-                              imageUrl: pageViewBannersRecord.firstBanner,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
-                            CachedNetworkImage(
-                              imageUrl: pageViewBannersRecord.secondBanner,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
-                            CachedNetworkImage(
-                              imageUrl: pageViewBannersRecord.thirdBanner,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            )
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment(0, 1),
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                          child: SmoothPageIndicator(
-                            controller: pageViewController,
-                            count: 3,
-                            axisDirection: Axis.horizontal,
-                            onDotClicked: (i) {
-                              pageViewController.animateToPage(
-                                i,
-                                duration: Duration(milliseconds: 500),
-                                curve: Curves.ease,
-                              );
-                            },
-                            effect: ExpandingDotsEffect(
-                              expansionFactor: 2,
-                              spacing: 8,
-                              radius: 16,
-                              dotWidth: 16,
-                              dotHeight: 16,
-                              dotColor: Color(0xFF9E9E9E),
-                              activeDotColor: Color(0xFF3F51B5),
-                              paintStyle: PaintingStyle.fill,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
             ),
           ),
         );

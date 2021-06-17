@@ -22,6 +22,6 @@ Future launchURL(String url) async {
   }
 }
 
-Timestamp get getCurrentTimestamp => Timestamp.fromDate(DateTime.now());
+DateTime get getCurrentTimestamp => DateTime.now();
 
 bool get isIos => Platform.isIOS;
