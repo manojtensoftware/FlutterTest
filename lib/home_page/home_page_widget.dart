@@ -248,6 +248,173 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               ],
             ),
           ),
+          body: SafeArea(
+            child: StreamBuilder<List<BranchRecord>>(
+              stream: queryBranchRecord(
+                queryBuilder: (branchRecord) =>
+                    branchRecord.where('Branch_closed', isEqualTo: false),
+              ),
+              builder: (context, snapshot) {
+                // Customize what your widget looks like when it's loading.
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                List<BranchRecord> listViewBranchRecordList = snapshot.data;
+                // Customize what your widget looks like with no query results.
+                if (snapshot.data.isEmpty) {
+                  // return Container();
+                  // For now, we'll just include some dummy data.
+                  listViewBranchRecordList = createDummyBranchRecord(count: 4);
+                }
+                return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  scrollDirection: Axis.vertical,
+                  itemCount: listViewBranchRecordList.length,
+                  itemBuilder: (context, listViewIndex) {
+                    final listViewBranchRecord =
+                        listViewBranchRecordList[listViewIndex];
+                    return Padding(
+                      padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      child: Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        color: Color(0xFFF5F5F5),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment(0, 0),
+                              child: Image.network(
+                                'https://picsum.photos/seed/284/600',
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment(-0.05, 0.95),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Container(
+                                    width: 300,
+                                    height: 65,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFF9F8F8),
+                                      borderRadius: BorderRadius.circular(8),
+                                      shape: BoxShape.rectangle,
+                                      border: Border.all(
+                                        color: Color(0xFF0C0101),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  5, 5, 0, 0),
+                                              child: Icon(
+                                                Icons.location_on,
+                                                color: Color(0xFF119720),
+                                                size: 24,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  5, 0, 0, 0),
+                                              child: Text(
+                                                'Address',
+                                                style: FlutterFlowTheme
+                                                    .bodyText1
+                                                    .override(
+                                                  fontFamily: 'Poppins',
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Align(
+                                                alignment: Alignment(1, 0),
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    print(
+                                                        'IconButton pressed ...');
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.phone,
+                                                    color: Color(0xFF5388DE),
+                                                    size: 24,
+                                                  ),
+                                                  iconSize: 24,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  5, 0, 0, 0),
+                                              child: Icon(
+                                                Icons.watch_later,
+                                                color: Color(0xFFDD4A4A),
+                                                size: 22,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  5, 0, 0, 0),
+                                              child: Text(
+                                                '10 AM-4PM',
+                                                style: FlutterFlowTheme
+                                                    .bodyText1
+                                                    .override(
+                                                  fontFamily: 'Poppins',
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Align(
+                                                alignment: Alignment(0.9, 0),
+                                                child: Text(
+                                                  '9234434490',
+                                                  style: FlutterFlowTheme
+                                                      .bodyText1
+                                                      .override(
+                                                    fontFamily: 'Poppins',
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         );
       },
     );
