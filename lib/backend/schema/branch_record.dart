@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_collection/built_collection.dart';
@@ -26,10 +28,6 @@ abstract class BranchRecord
   String get branchCity;
 
   @nullable
-  @BuiltValueField(wireName: 'Branch_Address')
-  String get branchAddress;
-
-  @nullable
   @BuiltValueField(wireName: 'Branch_contact')
   String get branchContact;
 
@@ -50,6 +48,10 @@ abstract class BranchRecord
   String get branchTiming;
 
   @nullable
+  @BuiltValueField(wireName: 'Branch_address')
+  String get branchAddress;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -57,10 +59,10 @@ abstract class BranchRecord
     ..branchName = ''
     ..branchImage = ''
     ..branchCity = ''
-    ..branchAddress = ''
     ..branchContact = ''
     ..branchClosed = false
-    ..branchTiming = '';
+    ..branchTiming = ''
+    ..branchAddress = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('Branch');
@@ -72,18 +74,23 @@ abstract class BranchRecord
   BranchRecord._();
   factory BranchRecord([void Function(BranchRecordBuilder) updates]) =
       _$BranchRecord;
+
+  static BranchRecord getDocumentFromData(
+          Map<String, dynamic> data, DocumentReference reference) =>
+      serializers.deserializeWith(
+          serializer, {...data, kDocumentReferenceField: reference});
 }
 
 Map<String, dynamic> createBranchRecordData({
   String branchName,
   String branchImage,
   String branchCity,
-  String branchAddress,
   String branchContact,
   bool branchClosed,
   LatLng branchLat,
   LatLng branchLng,
   String branchTiming,
+  String branchAddress,
 }) =>
     serializers.toFirestore(
         BranchRecord.serializer,
@@ -91,24 +98,24 @@ Map<String, dynamic> createBranchRecordData({
           ..branchName = branchName
           ..branchImage = branchImage
           ..branchCity = branchCity
-          ..branchAddress = branchAddress
           ..branchContact = branchContact
           ..branchClosed = branchClosed
           ..branchLat = branchLat
           ..branchLng = branchLng
-          ..branchTiming = branchTiming));
+          ..branchTiming = branchTiming
+          ..branchAddress = branchAddress));
 
 BranchRecord get dummyBranchRecord {
   final builder = BranchRecordBuilder()
     ..branchName = dummyString
     ..branchImage = dummyImagePath
     ..branchCity = dummyString
-    ..branchAddress = dummyString
     ..branchContact = dummyString
     ..branchClosed = dummyBoolean
     ..branchLat = dummyLatLng
     ..branchLng = dummyLatLng
-    ..branchTiming = dummyString;
+    ..branchTiming = dummyString
+    ..branchAddress = dummyString;
   return builder.build();
 }
 

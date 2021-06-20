@@ -9,6 +9,8 @@ import 'product_category_record.dart';
 import 'item_master_record.dart';
 import 'banners_record.dart';
 import 'branch_record.dart';
+import 'latestvideos_record.dart';
+import 'coupons_record.dart';
 
 part 'serializers.g.dart';
 
@@ -20,6 +22,8 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   ItemMasterRecord,
   BannersRecord,
   BranchRecord,
+  LatestvideosRecord,
+  CouponsRecord,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DocumentReferenceSerializer())
@@ -118,4 +122,13 @@ extension GeoPointExtension on LatLng {
 
 extension LatLngExtension on GeoPoint {
   LatLng toLatLng() => LatLng(latitude, longitude);
+}
+
+DocumentReference toRef(String ref) => FirebaseFirestore.instance.doc(ref);
+
+T safeGet<T>(T Function() func) {
+  try {
+    return func();
+  } catch (_) {}
+  return null;
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_collection/built_collection.dart';
@@ -61,6 +63,11 @@ abstract class ItemMasterRecord
   ItemMasterRecord._();
   factory ItemMasterRecord([void Function(ItemMasterRecordBuilder) updates]) =
       _$ItemMasterRecord;
+
+  static ItemMasterRecord getDocumentFromData(
+          Map<String, dynamic> data, DocumentReference reference) =>
+      serializers.deserializeWith(
+          serializer, {...data, kDocumentReferenceField: reference});
 }
 
 Map<String, dynamic> createItemMasterRecordData({

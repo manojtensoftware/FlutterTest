@@ -50,6 +50,12 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.primaryColor,
           automaticallyImplyLeading: true,
+          title: Text(
+            'Edit Profile',
+            style: FlutterFlowTheme.title2.override(
+              fontFamily: 'Poppins',
+            ),
+          ),
           actions: [
             IconButton(
               onPressed: () async {
