@@ -28,12 +28,17 @@ abstract class CouponsRecord
   DateTime get creationDate;
 
   @nullable
+  @BuiltValueField(wireName: 'coupon_code')
+  String get couponCode;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
   static void _initializeBuilder(CouponsRecordBuilder builder) => builder
     ..couponCategory = ''
-    ..imagePath = '';
+    ..imagePath = ''
+    ..couponCode = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('Coupons');
@@ -56,19 +61,22 @@ Map<String, dynamic> createCouponsRecordData({
   String couponCategory,
   String imagePath,
   DateTime creationDate,
+  String couponCode,
 }) =>
     serializers.toFirestore(
         CouponsRecord.serializer,
         CouponsRecord((c) => c
           ..couponCategory = couponCategory
           ..imagePath = imagePath
-          ..creationDate = creationDate));
+          ..creationDate = creationDate
+          ..couponCode = couponCode));
 
 CouponsRecord get dummyCouponsRecord {
   final builder = CouponsRecordBuilder()
     ..couponCategory = dummyString
     ..imagePath = dummyImagePath
-    ..creationDate = dummyTimestamp;
+    ..creationDate = dummyTimestamp
+    ..couponCode = dummyString;
   return builder.build();
 }
 
