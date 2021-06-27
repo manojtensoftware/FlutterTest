@@ -11,6 +11,7 @@ import 'schema/banners_record.dart';
 import 'schema/branch_record.dart';
 import 'schema/latestvideos_record.dart';
 import 'schema/coupons_record.dart';
+import 'schema/transactions_record.dart';
 import 'schema/serializers.dart';
 
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +23,7 @@ export 'schema/banners_record.dart';
 export 'schema/branch_record.dart';
 export 'schema/latestvideos_record.dart';
 export 'schema/coupons_record.dart';
+export 'schema/transactions_record.dart';
 
 Stream<List<UsersRecord>> queryUsersRecord(
         {Query Function(Query) queryBuilder,
@@ -72,6 +74,14 @@ Stream<List<CouponsRecord>> queryCouponsRecord(
         int limit = -1,
         bool singleRecord = false}) =>
     queryCollection(CouponsRecord.collection, CouponsRecord.serializer,
+        queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
+
+Stream<List<TransactionsRecord>> queryTransactionsRecord(
+        {Query Function(Query) queryBuilder,
+        int limit = -1,
+        bool singleRecord = false}) =>
+    queryCollection(
+        TransactionsRecord.collection, TransactionsRecord.serializer,
         queryBuilder: queryBuilder, limit: limit, singleRecord: singleRecord);
 
 Stream<List<T>> queryCollection<T>(

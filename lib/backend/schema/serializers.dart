@@ -11,6 +11,7 @@ import 'banners_record.dart';
 import 'branch_record.dart';
 import 'latestvideos_record.dart';
 import 'coupons_record.dart';
+import 'transactions_record.dart';
 
 part 'serializers.g.dart';
 
@@ -24,6 +25,7 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   BranchRecord,
   LatestvideosRecord,
   CouponsRecord,
+  TransactionsRecord,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DocumentReferenceSerializer())

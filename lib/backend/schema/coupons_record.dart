@@ -32,13 +32,18 @@ abstract class CouponsRecord
   String get couponCode;
 
   @nullable
+  @BuiltValueField(wireName: 'Likedby')
+  BuiltList<DocumentReference> get likedby;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
   static void _initializeBuilder(CouponsRecordBuilder builder) => builder
     ..couponCategory = ''
     ..imagePath = ''
-    ..couponCode = '';
+    ..couponCode = ''
+    ..likedby = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('Coupons');
@@ -69,7 +74,8 @@ Map<String, dynamic> createCouponsRecordData({
           ..couponCategory = couponCategory
           ..imagePath = imagePath
           ..creationDate = creationDate
-          ..couponCode = couponCode));
+          ..couponCode = couponCode
+          ..likedby = null));
 
 CouponsRecord get dummyCouponsRecord {
   final builder = CouponsRecordBuilder()

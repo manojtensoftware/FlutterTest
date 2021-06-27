@@ -57,10 +57,6 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
   String get doaMonth;
 
   @nullable
-  @BuiltValueField(wireName: 'coupon_apply')
-  BuiltList<DocumentReference> get couponApply;
-
-  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -74,8 +70,7 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..dobDay = ''
     ..dobMonth = ''
     ..doaDay = ''
-    ..doaMonth = ''
-    ..couponApply = ListBuilder();
+    ..doaMonth = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -120,8 +115,7 @@ Map<String, dynamic> createUsersRecordData({
           ..dobDay = dobDay
           ..dobMonth = dobMonth
           ..doaDay = doaDay
-          ..doaMonth = doaMonth
-          ..couponApply = null));
+          ..doaMonth = doaMonth));
 
 UsersRecord get dummyUsersRecord {
   final builder = UsersRecordBuilder()

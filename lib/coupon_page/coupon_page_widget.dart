@@ -1,8 +1,8 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_toggle_icon.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -72,52 +72,101 @@ class _CouponPageWidgetState extends State<CouponPageWidget> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  final usersRecordData = {
-                                    'coupon_apply': FieldValue.arrayUnion(
-                                        [listViewCouponsRecord.reference]),
-                                  };
-
-                                  await currentUserReference
-                                      .update(usersRecordData);
-                                },
-                                child: Text(
-                                  'Click to Apply',
-                                  style: FlutterFlowTheme.bodyText1.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFFF9F8F8),
-                                  ),
-                                ),
-                              )
-                            ],
+                            children: [],
                           ),
                         ),
                       ),
                       Align(
-                        alignment: Alignment(0, 0),
+                        alignment: Alignment(4.5, 0.82),
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 160, 10, 0),
+                          padding: EdgeInsets.fromLTRB(10, 180, 10, 0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                'Code:',
-                                style: FlutterFlowTheme.bodyText1.override(
-                                  fontFamily: 'Poppins',
-                                  color: Color(0xFFF9F8F8),
+                              Container(
+                                width: 150,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF0C0101),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                      child: Text(
+                                        'CODE',
+                                        style:
+                                            FlutterFlowTheme.bodyText1.override(
+                                          fontFamily: 'Poppins',
+                                          color: Color(0xFFF9F8F8),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                      child: Text(
+                                        listViewCouponsRecord.couponCode,
+                                        style:
+                                            FlutterFlowTheme.bodyText1.override(
+                                          fontFamily: 'Poppins',
+                                          color: Color(0xFFF9F8F8),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Text(
-                                  listViewCouponsRecord.couponCode,
-                                  style: FlutterFlowTheme.bodyText1.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFFF9F8F8),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment(0.9, 0),
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF0C0101),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment(0, 0),
+                                      child: ToggleIcon(
+                                        onPressed: () async {
+                                          final likedbyElement =
+                                              currentUserReference;
+                                          final likedbyUpdate =
+                                              listViewCouponsRecord.likedby
+                                                      .contains(likedbyElement)
+                                                  ? FieldValue.arrayRemove(
+                                                      [likedbyElement])
+                                                  : FieldValue.arrayUnion(
+                                                      [likedbyElement]);
+                                          final couponsRecordData = {
+                                            'Likedby': likedbyUpdate,
+                                          };
+
+                                          await listViewCouponsRecord.reference
+                                              .update(couponsRecordData);
+                                        },
+                                        value: listViewCouponsRecord.likedby
+                                            .contains(currentUserReference),
+                                        onIcon: Icon(
+                                          Icons.favorite_outlined,
+                                          color: Color(0xFFE62F66),
+                                          size: 25,
+                                        ),
+                                        offIcon: Icon(
+                                          Icons.favorite_outlined,
+                                          color: Color(0xFFF9F8F8),
+                                          size: 25,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               )

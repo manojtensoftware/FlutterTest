@@ -29,28 +29,6 @@ abstract class ProductCategoryRecord
   bool get isActive;
 
   @nullable
-  String get email;
-
-  @nullable
-  @BuiltValueField(wireName: 'display_name')
-  String get displayName;
-
-  @nullable
-  @BuiltValueField(wireName: 'photo_url')
-  String get photoUrl;
-
-  @nullable
-  String get uid;
-
-  @nullable
-  @BuiltValueField(wireName: 'created_time')
-  DateTime get createdTime;
-
-  @nullable
-  @BuiltValueField(wireName: 'phone_number')
-  String get phoneNumber;
-
-  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -58,12 +36,7 @@ abstract class ProductCategoryRecord
       builder
         ..categoryName = ''
         ..catImageUrl = ''
-        ..isActive = false
-        ..email = ''
-        ..displayName = ''
-        ..photoUrl = ''
-        ..uid = ''
-        ..phoneNumber = '';
+        ..isActive = false;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('product_category');
@@ -87,37 +60,19 @@ Map<String, dynamic> createProductCategoryRecordData({
   String categoryName,
   String catImageUrl,
   bool isActive,
-  String email,
-  String displayName,
-  String photoUrl,
-  String uid,
-  DateTime createdTime,
-  String phoneNumber,
 }) =>
     serializers.toFirestore(
         ProductCategoryRecord.serializer,
         ProductCategoryRecord((p) => p
           ..categoryName = categoryName
           ..catImageUrl = catImageUrl
-          ..isActive = isActive
-          ..email = email
-          ..displayName = displayName
-          ..photoUrl = photoUrl
-          ..uid = uid
-          ..createdTime = createdTime
-          ..phoneNumber = phoneNumber));
+          ..isActive = isActive));
 
 ProductCategoryRecord get dummyProductCategoryRecord {
   final builder = ProductCategoryRecordBuilder()
     ..categoryName = dummyString
     ..catImageUrl = dummyImagePath
-    ..isActive = dummyBoolean
-    ..email = dummyString
-    ..displayName = dummyString
-    ..photoUrl = dummyImagePath
-    ..uid = dummyString
-    ..createdTime = dummyTimestamp
-    ..phoneNumber = dummyString;
+    ..isActive = dummyBoolean;
   return builder.build();
 }
 

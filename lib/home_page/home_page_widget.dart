@@ -412,7 +412,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                                     child: InkWell(
                                       onTap: () async {
                                         await Navigator.push(
@@ -428,11 +428,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           ),
                                         );
                                       },
-                                      child: Image.network(
-                                        listViewCouponsRecord.imagePath,
-                                        width: 200,
-                                        height: 200,
-                                        fit: BoxFit.cover,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(2),
+                                        child: Image.network(
+                                          listViewCouponsRecord.imagePath,
+                                          width: 200,
+                                          height: 200,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   )
@@ -501,7 +504,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                                     child: InkWell(
                                       onTap: () async {
                                         await Navigator.push(
