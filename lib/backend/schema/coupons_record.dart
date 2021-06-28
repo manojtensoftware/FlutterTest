@@ -1,13 +1,8 @@
 import 'dart:async';
 
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:built_collection/built_collection.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:latlong/latlong.dart';
-
-import 'schema_util.dart';
+import 'index.dart';
 import 'serializers.dart';
+import 'package:built_value/built_value.dart';
 
 part 'coupons_record.g.dart';
 
@@ -76,15 +71,3 @@ Map<String, dynamic> createCouponsRecordData({
           ..creationDate = creationDate
           ..couponCode = couponCode
           ..likedby = null));
-
-CouponsRecord get dummyCouponsRecord {
-  final builder = CouponsRecordBuilder()
-    ..couponCategory = dummyString
-    ..imagePath = dummyImagePath
-    ..creationDate = dummyTimestamp
-    ..couponCode = dummyString;
-  return builder.build();
-}
-
-List<CouponsRecord> createDummyCouponsRecord({int count}) =>
-    List.generate(count, (_) => dummyCouponsRecord);

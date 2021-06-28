@@ -396,10 +396,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                               snapshot.data;
                           // Customize what your widget looks like with no query results.
                           if (snapshot.data.isEmpty) {
-                            // return Container();
-                            // For now, we'll just include some dummy data.
-                            listViewCouponsRecordList =
-                                createDummyCouponsRecord(count: 4);
+                            return Container(
+                              height: 100,
+                              child: Center(
+                                child: Text('No results.'),
+                              ),
+                            );
                           }
                           return ListView.builder(
                             padding: EdgeInsets.zero,
@@ -477,7 +479,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       child: StreamBuilder<List<LatestvideosRecord>>(
                         stream: queryLatestvideosRecord(
                           queryBuilder: (latestvideosRecord) =>
-                              latestvideosRecord.orderBy('Creation_date'),
+                              latestvideosRecord.orderBy('Creation_date',
+                                  descending: true),
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -488,10 +491,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                               listViewLatestvideosRecordList = snapshot.data;
                           // Customize what your widget looks like with no query results.
                           if (snapshot.data.isEmpty) {
-                            // return Container();
-                            // For now, we'll just include some dummy data.
-                            listViewLatestvideosRecordList =
-                                createDummyLatestvideosRecord(count: 4);
+                            return Container(
+                              height: 100,
+                              child: Center(
+                                child: Text('No results.'),
+                              ),
+                            );
                           }
                           return ListView.builder(
                             padding: EdgeInsets.zero,
@@ -504,7 +509,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
                                     child: InkWell(
                                       onTap: () async {
                                         await Navigator.push(

@@ -20,7 +20,7 @@ class LoginPageWidget extends StatefulWidget {
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
   TextEditingController passWordController;
-  bool passwordVisibility;
+  bool passWordVisibility;
   TextEditingController userNameController;
   TextEditingController phoneController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -29,7 +29,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   void initState() {
     super.initState();
     passWordController = TextEditingController();
-    passwordVisibility = false;
+    passWordVisibility = false;
     userNameController = TextEditingController();
     phoneController = TextEditingController(text: '+91');
   }
@@ -321,7 +321,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                           EdgeInsets.fromLTRB(10, 0, 10, 0),
                                       child: TextFormField(
                                         controller: passWordController,
-                                        obscureText: !passwordVisibility,
+                                        obscureText: !passWordVisibility,
                                         decoration: InputDecoration(
                                           isDense: true,
                                           hintText: 'Password',
@@ -357,11 +357,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                                               EdgeInsets.fromLTRB(10, 0, 0, 5),
                                           suffixIcon: InkWell(
                                             onTap: () => setState(
-                                              () => passwordVisibility =
-                                                  !passwordVisibility,
+                                              () => passWordVisibility =
+                                                  !passWordVisibility,
                                             ),
                                             child: Icon(
-                                              passwordVisibility
+                                              passWordVisibility
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,

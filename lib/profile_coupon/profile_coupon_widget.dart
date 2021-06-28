@@ -33,9 +33,12 @@ class _ProfileCouponWidgetState extends State<ProfileCouponWidget> {
           List<CouponsRecord> listViewCouponsRecordList = snapshot.data;
           // Customize what your widget looks like with no query results.
           if (snapshot.data.isEmpty) {
-            // return Container();
-            // For now, we'll just include some dummy data.
-            listViewCouponsRecordList = createDummyCouponsRecord(count: 4);
+            return Container(
+              height: 100,
+              child: Center(
+                child: Text('No results.'),
+              ),
+            );
           }
           return ListView.builder(
             padding: EdgeInsets.zero,

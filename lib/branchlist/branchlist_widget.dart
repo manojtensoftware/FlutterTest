@@ -29,9 +29,12 @@ class _BranchlistWidgetState extends State<BranchlistWidget> {
           List<BranchRecord> listViewBranchRecordList = snapshot.data;
           // Customize what your widget looks like with no query results.
           if (snapshot.data.isEmpty) {
-            // return Container();
-            // For now, we'll just include some dummy data.
-            listViewBranchRecordList = createDummyBranchRecord(count: 4);
+            return Container(
+              height: 100,
+              child: Center(
+                child: Text('No results.'),
+              ),
+            );
           }
           return ListView.builder(
             padding: EdgeInsets.zero,

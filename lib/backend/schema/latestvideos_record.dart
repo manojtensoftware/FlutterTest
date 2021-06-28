@@ -1,13 +1,8 @@
 import 'dart:async';
 
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:built_collection/built_collection.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:latlong/latlong.dart';
-
-import 'schema_util.dart';
+import 'index.dart';
 import 'serializers.dart';
+import 'package:built_value/built_value.dart';
 
 part 'latestvideos_record.g.dart';
 
@@ -72,15 +67,3 @@ Map<String, dynamic> createLatestvideosRecordData({
           ..path = path
           ..category = category
           ..creationDate = creationDate));
-
-LatestvideosRecord get dummyLatestvideosRecord {
-  final builder = LatestvideosRecordBuilder()
-    ..titleName = dummyString
-    ..path = dummyVideoPath
-    ..category = dummyString
-    ..creationDate = dummyTimestamp;
-  return builder.build();
-}
-
-List<LatestvideosRecord> createDummyLatestvideosRecord({int count}) =>
-    List.generate(count, (_) => dummyLatestvideosRecord);

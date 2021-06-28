@@ -15,12 +15,12 @@ class SignupWidget extends StatefulWidget {
 
 class _SignupWidgetState extends State<SignupWidget> {
   TextEditingController txtconfirmpasswordController;
-  bool passwordVisibility;
+  bool txtconfirmpasswordVisibility;
   TextEditingController txtemailController;
   TextEditingController txtnameController;
   TextEditingController txtphoneController;
   TextEditingController txtpasswordController;
-  bool passwordVisibility;
+  bool txtpasswordVisibility;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -28,12 +28,12 @@ class _SignupWidgetState extends State<SignupWidget> {
   void initState() {
     super.initState();
     txtconfirmpasswordController = TextEditingController();
-    passwordVisibility = false;
+    txtconfirmpasswordVisibility = false;
     txtemailController = TextEditingController();
     txtnameController = TextEditingController();
     txtphoneController = TextEditingController(text: '+91');
     txtpasswordController = TextEditingController();
-    passwordVisibility = false;
+    txtpasswordVisibility = false;
   }
 
   @override
@@ -194,7 +194,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
                   child: TextFormField(
                     controller: txtpasswordController,
-                    obscureText: !passwordVisibility,
+                    obscureText: !txtpasswordVisibility,
                     decoration: InputDecoration(
                       hintText: 'Password',
                       hintStyle: FlutterFlowTheme.bodyText1.override(
@@ -227,10 +227,10 @@ class _SignupWidgetState extends State<SignupWidget> {
                       contentPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
                       suffixIcon: InkWell(
                         onTap: () => setState(
-                          () => passwordVisibility = !passwordVisibility,
+                          () => txtpasswordVisibility = !txtpasswordVisibility,
                         ),
                         child: Icon(
-                          passwordVisibility
+                          txtpasswordVisibility
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
                           size: 22,
@@ -247,7 +247,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
                   child: TextFormField(
                     controller: txtconfirmpasswordController,
-                    obscureText: !passwordVisibility,
+                    obscureText: !txtconfirmpasswordVisibility,
                     decoration: InputDecoration(
                       hintText: 'Confirm Password',
                       hintStyle: FlutterFlowTheme.bodyText1.override(
@@ -280,10 +280,11 @@ class _SignupWidgetState extends State<SignupWidget> {
                       contentPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
                       suffixIcon: InkWell(
                         onTap: () => setState(
-                          () => passwordVisibility = !passwordVisibility,
+                          () => txtconfirmpasswordVisibility =
+                              !txtconfirmpasswordVisibility,
                         ),
                         child: Icon(
-                          passwordVisibility
+                          txtconfirmpasswordVisibility
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
                           size: 22,

@@ -1,13 +1,8 @@
 import 'dart:async';
 
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:built_collection/built_collection.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:latlong/latlong.dart';
-
-import 'schema_util.dart';
+import 'index.dart';
 import 'serializers.dart';
+import 'package:built_value/built_value.dart';
 
 part 'banners_record.g.dart';
 
@@ -64,14 +59,3 @@ Map<String, dynamic> createBannersRecordData({
           ..firstBanner = firstBanner
           ..secondBanner = secondBanner
           ..thirdBanner = thirdBanner));
-
-BannersRecord get dummyBannersRecord {
-  final builder = BannersRecordBuilder()
-    ..firstBanner = dummyImagePath
-    ..secondBanner = dummyImagePath
-    ..thirdBanner = dummyImagePath;
-  return builder.build();
-}
-
-List<BannersRecord> createDummyBannersRecord({int count}) =>
-    List.generate(count, (_) => dummyBannersRecord);
