@@ -51,5 +51,11 @@ service cloud.firestore {
     match /Transactions/{id} {
       allow read, write: if true;
     }
+
+    // WARNING! ONLY FOR TEST MODE: Make sure you properly configure the
+    // security rules for this collection before publishing your app.
+    match /Special_coupon/{id} {
+      allow read, write: if true;
+    }
   }
 }
